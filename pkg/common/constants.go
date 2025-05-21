@@ -29,4 +29,31 @@ const (
 	RecoveryQueue         = "@recovery@"
 	RecoveryQueueFull     = "root." + RecoveryQueue
 	DefaultPlacementQueue = "root.default"
+	LdapHost              = "Host"
+	LdapPort              = "Port"
+	LdapBaseDN            = "BaseDN"
+	LdapFilter            = "Filter"
+	LdapGroupAttr         = "GroupAttr"
+	LdapReturnAttr        = "ReturnAttr"
+	LdapBindUser          = "BindUser"
+	LdapBindPassword      = "BindPassword"
+	LdapInsecure          = "Insecure"
+	LdapSSL               = "SSL"
+)
+
+const (
+	DefaultLdapHost         = "localhost"
+	DefaultLdapPort         = 389
+	DefaultLdapBaseDN       = "dc=example,dc=com"
+	DefaultLdapFilter       = "(&(sAMAccountName=%s))"
+	DefaultLdapGroupAttr    = "memberOf"
+	DefaultLdapBindUser     = "admin"
+	DefaultLdapBindPassword = "admin"
+	DefaultLdapInsecure     = false
+	DefaultLdapSSL          = false
+)
+
+var (
+	LdapMountPath         = "/run/secrets/ldap"
+	DefaultLdapReturnAttr = []string{"memberOf"}
 )

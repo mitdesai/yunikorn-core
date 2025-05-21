@@ -28,6 +28,7 @@ import (
 	"gotest.tools/v3/assert"
 
 	"github.com/apache/yunikorn-core/pkg/common"
+	"github.com/apache/yunikorn-core/pkg/common/configs"
 	"github.com/apache/yunikorn-scheduler-interface/lib/go/si"
 )
 
@@ -50,9 +51,24 @@ func (c *UserGroupCache) getUGmap() map[string]*UserGroup {
 	return c.ugs
 }
 
+// UserGroupResolver Config for the test
+var testResolver = configs.UserGroupResolver{
+	Type: "test",
+}
+
+// UserGroupResolver Config for the os resolver
+var osResolver = configs.UserGroupResolver{
+	Type: "os",
+}
+
+// UserGroupResolver Config for the unknown resolver
+var unknownResolver = configs.UserGroupResolver{
+	Type: "unknown",
+}
+
 func TestGetUserGroupCache(t *testing.T) {
 	// get the cache with the test resolver set
-	testCache := GetUserGroupCache("test")
+	testCache := GetUserGroupCache(testResolver)
 	assert.Assert(t, testCache != nil, "Cache create failed")
 	assert.Equal(t, 0, testCache.getUGsize(), "Cache is not empty: %v", testCache.getUGmap())
 
@@ -61,7 +77,7 @@ func TestGetUserGroupCache(t *testing.T) {
 	assert.Assert(t, stopped.Load())
 
 	// get the cache with the os resolver set
-	testCache = GetUserGroupCache("os")
+	testCache = GetUserGroupCache(osResolver)
 	assert.Assert(t, testCache != nil, "Cache create failed")
 	assert.Equal(t, 0, testCache.getUGsize(), "Cache is not empty: %v", testCache.getUGmap())
 
@@ -70,7 +86,7 @@ func TestGetUserGroupCache(t *testing.T) {
 	assert.Assert(t, stopped.Load())
 
 	// get the cache with the default resolver set
-	testCache = GetUserGroupCache("unknown")
+	testCache = GetUserGroupCache(unknownResolver)
 	assert.Assert(t, testCache != nil, "Cache create failed")
 	assert.Equal(t, 0, testCache.getUGsize(), "Cache is not empty: %v", testCache.getUGmap())
 
@@ -85,7 +101,7 @@ func TestGetUserGroupCache(t *testing.T) {
 }
 
 func TestGetUserGroup(t *testing.T) {
-	testCache := GetUserGroupCache("test")
+	testCache := GetUserGroupCache(testResolver)
 	testCache.resetCache()
 	// test cache should be empty now
 	assert.Equal(t, 0, testCache.getUGsize(), "Cache is not empty: %v", testCache.getUGmap())
@@ -121,7 +137,7 @@ func TestGetUserGroup(t *testing.T) {
 }
 
 func TestBrokenUserGroup(t *testing.T) {
-	testCache := GetUserGroupCache("test")
+	testCache := GetUserGroupCache(testResolver)
 	testCache.resetCache()
 	// test cache should be empty now
 	assert.Equal(t, 0, testCache.getUGsize(), "Cache is not empty: %v", testCache.getUGmap())
@@ -165,7 +181,7 @@ func TestBrokenUserGroup(t *testing.T) {
 }
 
 func TestGetUserGroupFail(t *testing.T) {
-	testCache := GetUserGroupCache("test")
+	testCache := GetUserGroupCache(testResolver)
 	testCache.resetCache()
 	// test cache should be empty now
 	assert.Equal(t, 0, testCache.getUGsize(), "Cache is not empty: %v", testCache.getUGmap())
@@ -205,7 +221,7 @@ func TestGetUserGroupFail(t *testing.T) {
 }
 
 func TestCacheCleanUp(t *testing.T) {
-	testCache := GetUserGroupCache("test")
+	testCache := GetUserGroupCache(testResolver)
 	testCache.resetCache()
 	// test cache should be empty now
 	assert.Equal(t, 0, testCache.getUGsize(), "Cache is not empty: %v", testCache.getUGmap())
@@ -248,7 +264,7 @@ func TestCacheCleanUp(t *testing.T) {
 }
 
 func TestIntervalCacheCleanUp(t *testing.T) {
-	testCache := GetUserGroupCache("test")
+	testCache := GetUserGroupCache(testResolver)
 	testCache.resetCache()
 	// test cache should be empty now
 	assert.Equal(t, 0, testCache.getUGsize(), "Cache is not empty: %v", testCache.getUGmap())
@@ -284,7 +300,7 @@ func TestIntervalCacheCleanUp(t *testing.T) {
 }
 
 func TestConvertUGI(t *testing.T) {
-	testCache := GetUserGroupCache("test")
+	testCache := GetUserGroupCache(testResolver)
 	testCache.resetCache()
 	// test cache should be empty now
 	assert.Equal(t, 0, testCache.getUGsize(), "Cache is not empty: %v", testCache.getUGmap())
